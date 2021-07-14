@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.WhatTimeUntilTheBell" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">#1f1f1f</item>
+        <item name="colorPrimaryDark">#181818</item>
+        <item name="android:colorBackground">#1a1a1a</item>
+    </style>
+</resources>

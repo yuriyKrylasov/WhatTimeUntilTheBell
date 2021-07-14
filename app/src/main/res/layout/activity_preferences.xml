@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/xml_file_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/xml_file"
+            android:layout_marginTop="16dp"
+            android:paddingStart="@dimen/preference_padding"
+            android:paddingLeft="@dimen/preference_padding"
+            android:textSize="16sp"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="sans-serif-medium" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_xml_prolog_pref"
+            android:title="@string/add_xml_prolog" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_new_line_to_end_pref"
+            android:title="@string/add_new_line_to_end" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/use_long_end_of_the_lesson_pref"
+            android:title="@string/use_long_end_of_the_lesson" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_beautiful_xml_pref"
+            android:title="@string/create_beautiful_xml" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notification"
+            android:layout_marginTop="16dp"
+            android:paddingStart="@dimen/preference_padding"
+            android:paddingLeft="@dimen/preference_padding"
+            android:textSize="16sp"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="sans-serif-medium" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_notification_pref"
+            android:title="@string/show_notification" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_notification_when_lessons_over_pref"
+            android:dependency="@id/show_notification_pref"
+            android:title="@string/show_when_lessons_over" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/other"
+            android:layout_marginTop="16dp"
+            android:paddingStart="@dimen/preference_padding"
+            android:paddingLeft="@dimen/preference_padding"
+            android:textSize="16sp"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="sans-serif-medium" />
+
+        <com.whatTimeUntilTheBell.SwitchPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dark_theme_pref"
+            android:title="@string/dark_theme" />
+
+        <com.whatTimeUntilTheBell.Preference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reset_settings_pref"
+            android:title="@string/reset_settings" />
+
+        <com.whatTimeUntilTheBell.Preference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/version_pref"
+            android:title="@string/version"
+            android:summary="3.0.3" />
+    </LinearLayout>
+</ScrollView>

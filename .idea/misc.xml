@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout-v21/preference_category_material.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout-v21/preference_material.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout/preference.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout/preference_category.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout/preference_category_material.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout/preference_widget_checkbox.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/MonstR/.gradle/caches/transforms-3/c906255ed76409c9241a014d25e19eaa/transformed/preference-1.0.0-alpha1/res/layout/preference_widget_switch_compat.xml" value="0.1482905982905983" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/drawable-anydpi-v24/ic_notification.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/drawable/ic_add.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/activity_main.xml" value="0.28306159420289856" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/activity_preferences.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/dialog_change_lesson.xml" value="0.25" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/dialog_confirm.xml" value="0.25" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/dialog_layout.xml" value="0.35625" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/file_dialog_main.xml" value="0.35625" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/file_dialog_row.xml" value="0.35625" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/fragment_list_view.xml" value="0.184375" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/layout_preference.xml" value="0.33" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/preference.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/preference_category.xml" value="0.1482905982905983" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/preference_category_layout.xml" value="0.25" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/layout/preference_layout.xml" value="0.1482905982905983" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/menu/main_menu.xml" value="0.35625" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/mipmap/ic_launcher.xml" value="0.3723958333333333" />
+        <entry key="..\:/Users/MonstR/AndroidStudioProjects/WhatTimeUntilTheBell/app/src/main/res/xml/preferences.xml" value="0.28306159420289856" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

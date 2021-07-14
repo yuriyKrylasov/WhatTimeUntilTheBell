@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">What time until the bell</string>
+    <string name="until_plh_left">Until %s left</string>
+    <string name="minutes">minutes</string>
+    <!-- when minutes is two, three or four (for russian) -->
+    <string name="minutes_ttf">minutes</string>
+    <string name="minute">minute</string>
+    <string name="seconds">seconds</string>
+    <!-- when seconds is two, three or four (for russian) -->
+    <string name="seconds_ttf">seconds</string>
+    <string name="second">second</string>
+    <string name="lessons_over">Lessons over</string>
+    <string name="lesson">lesson</string>
+    <string name="lesson_num">lesson %s</string>
+    <string name="_break">break</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="stop">Stop</string>
+    <string name="share">Share</string>
+    <string name="preferences">Preferences</string>
+    <string name="version">Version</string>
+    <string name="other">Other</string>
+    <string name="xml_file">XML file</string>
+    <string name="add_xml_prolog">Add XML prolog</string>
+    <string name="add_new_line_to_end">Add new line to end</string>
+    <string name="use_long_end_of_the_lesson">Use long end of the lesson</string>
+    <string name="create_beautiful_xml">Create beautiful XML</string>
+    <string name="increases_file_size">Increases file size by %s bytes</string>
+    <string name="increases_file_size_by_one_byte">Increases file size by 1 byte</string>
+    <string name="increases_lesson_size">Increases one lesson size by %s bytes</string>
+    <string name="increases_file_week_and_lesson_size">Increases file size by %s bytes, one week size by %s bytes and one lesson size by %s bytes</string>
+    <string name="change_lesson">Change lesson</string>
+    <string name="lesson_name">Lesson name</string>
+    <string name="delete_lesson">Delete lesson</string>
+    <string name="begin">Begin: %s</string>
+    <string name="end">End: %s</string>
+    <string name="load">Load</string>
+    <string name="lessons_not_found">Lessons not found</string>
+    <string name="select_file_manager">Select file manager</string>
+    <string name="wrong_xml_file">Wrong xml file</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete">Delete</string>
+    <string name="notification">Notification</string>
+    <string name="show_notification">Show notification</string>
+    <string name="show_when_lessons_over">Show when lessons over</string>
+    <string name="reset_settings">Reset settings</string>
+</resources>

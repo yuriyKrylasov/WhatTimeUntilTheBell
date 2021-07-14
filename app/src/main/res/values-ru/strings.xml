@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Сколько времени до звонка</string>
+    <string name="until_plh_left">До %s осталось</string>
+    <string name="minutes">минут</string>
+    <!-- две, три или четыре минуты -->
+    <string name="minutes_ttf">минуты</string>
+    <string name="minute">минута</string>
+    <string name="seconds">секунд</string>
+    <!-- две, три или четыре секунды -->
+    <string name="seconds_ttf">секунды</string>
+    <string name="second">секунда</string>
+    <string name="lessons_over">Уроки закончены</string>
+    <string name="lesson">урока</string>
+    <string name="lesson_num">урок %s</string>
+    <string name="_break">перемены</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
+    <string name="sunday">Воскресенье</string>
+    <string name="stop">Остановить</string>
+    <string name="share">Поделиться</string>
+    <string name="preferences">Настройки</string>
+    <string name="version">Версия</string>
+    <string name="other">Другое</string>
+    <string name="xml_file">XML файл</string>
+    <string name="add_xml_prolog">Добавлять XML пролог</string>
+    <string name="add_new_line_to_end">Добавлять новую строку в конце</string>
+    <string name="use_long_end_of_the_lesson">Использовать длинный конец урока</string>
+    <string name="create_beautiful_xml">Создавать читаемую разметку XML</string>
+    <string name="increases_file_size">Увеличивает размер файла на %s байт</string>
+    <string name="increases_file_size_by_one_byte">Увеличивает размер файла на 1 байт</string>
+    <string name="increases_lesson_size">Увеличивает размер одного урока на %s байт</string>
+    <string name="increases_file_week_and_lesson_size">Увеличивает размер файла на %s байта, размер одной недели на %s байт, а размер одного урока на %s байт</string>
+    <string name="change_lesson">Изменить урок</string>
+    <string name="lesson_name">Название урока</string>
+    <string name="delete_lesson">Удалить урок</string>
+    <string name="begin">Начало: %s</string>
+    <string name="end">Конец: %s</string>
+    <string name="load">Загрузить</string>
+    <string name="lessons_not_found">Уроки не найдены</string>
+    <string name="select_file_manager">Выберите проводник</string>
+    <string name="wrong_xml_file">Неправильный файл xml</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="delete">Удалить</string>
+    <string name="notification">Уведомление</string>
+    <string name="show_notification">Показывать уведомление</string>
+    <string name="show_when_lessons_over">Показывать, когда уроки закончены</string>
+    <string name="reset_settings">Сброс настроек</string>
+</resources>

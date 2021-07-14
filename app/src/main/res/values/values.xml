@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ActionButton">
+        <attr format="dimension" name="size"/>
+        <attr format="color" name="button_color"/>
+        <attr format="color" name="button_colorPressed"/>
+        <attr format="boolean" name="rippleEffect_enabled"/>
+        <attr format="color" name="button_colorRipple"/>
+        <attr format="dimension" name="shadow_radius"/>
+        <attr format="dimension" name="shadow_xOffset"/>
+        <attr format="dimension" name="shadow_yOffset"/>
+        <attr format="color" name="shadow_color"/>
+        <attr format="boolean" name="shadowResponsiveEffect_enabled"/>
+        <attr format="dimension" name="stroke_width"/>
+        <attr format="color" name="stroke_color"/>
+        <attr format="reference" name="show_animation"/>
+        <attr format="reference" name="hide_animation"/>
+        <attr format="reference" name="image"/>
+        <attr format="dimension" name="image_size"/>
+        <attr format="reference" name="animation_onShow"/>
+        <attr format="reference" name="animation_onHide"/>
+    </declare-styleable>
+</resources>
