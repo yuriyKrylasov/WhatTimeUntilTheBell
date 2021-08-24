@@ -1,19 +1,14 @@
 package com.whatTimeUntilTheBell;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +22,15 @@ public class ListViewFragment extends Fragment {
     private final static String[] hashMapValues = { "title", "time" };
     private final static int[] arrayOfIndices = { android.R.id.text1, android.R.id.text2 };
 
-    @NonNull
     private static HashMap<String, String> lessonToMap(Lesson lesson) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(hashMapValues[0], lesson.getTitle());
+        map.put(hashMapValues[0], lesson.title);
         map.put(hashMapValues[1], lesson.toString());
         return map;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDay = getArguments().getInt("day");
         mApp = (MyApplication) getActivity().getApplication();
 
@@ -45,7 +38,7 @@ public class ListViewFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         mFab = ((MainActivity) getActivity()).getActionButton();
 
         List<Lesson> lessons = mApp.lessons[mDay];
@@ -99,12 +92,10 @@ public class ListViewFragment extends Fragment {
         });
     }
 
-    @NonNull
     public static ListViewFragment newInstance(int day) {
         ListViewFragment fragment = new ListViewFragment();
         Bundle argumentsBundle = new Bundle(1);
         argumentsBundle.putInt("day", day);
-        ;
         fragment.setArguments(argumentsBundle);
         return fragment;
     }

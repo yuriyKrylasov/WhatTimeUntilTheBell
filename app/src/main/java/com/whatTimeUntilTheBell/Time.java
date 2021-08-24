@@ -3,15 +3,15 @@ package com.whatTimeUntilTheBell;
 import java.util.Calendar;
 
 public class Time {
-    private int mHours;
-    private int mMinutes;
-    private final int mSeconds;
+    int hours;
+    int minutes;
+    final int seconds;
 
     public Time() {
         Calendar calendar = Calendar.getInstance();
-        mHours   = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinutes = calendar.get(Calendar.MINUTE);
-        mSeconds = calendar.get(Calendar.SECOND);
+        hours   = calendar.get(Calendar.HOUR_OF_DAY);
+        minutes = calendar.get(Calendar.MINUTE);
+        seconds = calendar.get(Calendar.SECOND);
     }
 
     public Time(int hours, int minutes) {
@@ -19,42 +19,22 @@ public class Time {
     }
 
     public Time(int hours, int minutes, int seconds) {
-        mHours   = hours;
-        mMinutes = minutes;
-        mSeconds = seconds;
+        this.hours   = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
     }
 
     public Time(String time) {
         int index = time.indexOf(':');
         if (index > 0 && time.length() != index + 1) {
-            mHours = Integer.parseInt(time.substring(0, index));
-            mMinutes = Integer.parseInt(time.substring(index + 1));
+            hours = Integer.parseInt(time.substring(0, index));
+            minutes = Integer.parseInt(time.substring(index + 1));
         }
         else {
-            mHours = 24;
-            mMinutes = 0;
+            hours = 24;
+            minutes = 0;
         }
-        mSeconds = 0;
-    }
-
-    public int getHours() {
-        return mHours;
-    }
-
-    public void setHours(int hours) {
-        mHours = hours;
-    }
-
-    public int getMinutes() {
-        return mMinutes;
-    }
-
-    public void setMinutes(int minutes) {
-        mMinutes = minutes;
-    }
-
-    public int getSeconds() {
-        return mSeconds;
+        seconds = 0;
     }
 
     public int compareTo(Time time) {
@@ -67,11 +47,11 @@ public class Time {
     }
 
     private int toSeconds() {
-        return mHours * 3600 + mMinutes * 60 + mSeconds;
+        return hours * 3600 + minutes * 60 + seconds;
     }
 
     @Override
     public String toString() {
-        return mHours + ":" + (mMinutes < 10 ? "0" + mMinutes : mMinutes);
+        return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
     }
 }

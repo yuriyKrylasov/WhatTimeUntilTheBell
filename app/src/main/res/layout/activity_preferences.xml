@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/xml_file_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/xml_file"
@@ -20,24 +18,6 @@
             android:textSize="16sp"
             android:textColor="@color/colorAccent"
             app:fontFamily="sans-serif-medium" />
-
-        <com.whatTimeUntilTheBell.SwitchPreference
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_xml_prolog_pref"
-            android:title="@string/add_xml_prolog" />
-
-        <com.whatTimeUntilTheBell.SwitchPreference
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_new_line_to_end_pref"
-            android:title="@string/add_new_line_to_end" />
-
-        <com.whatTimeUntilTheBell.SwitchPreference
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/use_long_end_of_the_lesson_pref"
-            android:title="@string/use_long_end_of_the_lesson" />
 
         <com.whatTimeUntilTheBell.SwitchPreference
             android:layout_width="match_parent"
@@ -97,6 +77,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/version_pref"
             android:title="@string/version"
-            android:summary="3.0.3" />
+            android:summary="3.0.4" />
     </LinearLayout>
 </ScrollView>

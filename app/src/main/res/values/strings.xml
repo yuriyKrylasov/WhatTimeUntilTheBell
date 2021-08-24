@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">What time until the bell</string>
-    <string name="until_plh_left">Until %s left</string>
+    <string name="time_until_the_bell_title">Until %s left</string>
     <string name="minutes">minutes</string>
     <!-- when minutes is two, three or four (for russian) -->
     <string name="minutes_ttf">minutes</string>
@@ -28,14 +28,7 @@
     <string name="version">Version</string>
     <string name="other">Other</string>
     <string name="xml_file">XML file</string>
-    <string name="add_xml_prolog">Add XML prolog</string>
-    <string name="add_new_line_to_end">Add new line to end</string>
-    <string name="use_long_end_of_the_lesson">Use long end of the lesson</string>
     <string name="create_beautiful_xml">Create beautiful XML</string>
-    <string name="increases_file_size">Increases file size by %s bytes</string>
-    <string name="increases_file_size_by_one_byte">Increases file size by 1 byte</string>
-    <string name="increases_lesson_size">Increases one lesson size by %s bytes</string>
-    <string name="increases_file_week_and_lesson_size">Increases file size by %s bytes, one week size by %s bytes and one lesson size by %s bytes</string>
     <string name="change_lesson">Change lesson</string>
     <string name="lesson_name">Lesson name</string>
     <string name="delete_lesson">Delete lesson</string>

@@ -1,47 +1,22 @@
 package com.whatTimeUntilTheBell;
 
-import androidx.annotation.NonNull;
+class Lesson {
+    final Time begin;
+    final Time end;
+    String title;
 
-public class Lesson {
-    private final Time mBegin;
-    private final Time mEnd;
-    private String mTitle;
-
-    public final static String LONG_END = "></Lesson>";
-    public final static String SHORT_END = " />";
-
-    public static String lessonXmlTagEnd = SHORT_END;
-
-    public Lesson(Time begin, Time end, String title) {
-        mBegin = begin;
-        mEnd = end;
-        mTitle = title;
+    Lesson(Time begin, Time end, String title) {
+        this.begin = begin;
+        this.end   = end;
+        this.title = title;
     }
 
-    @NonNull
     @Override
     public String toString() {
-        return mBegin + " - " + mEnd;
+        return begin + " - " + end;
     }
 
-    @NonNull
-    public String toXml() {
-        return "<Lesson begin=\"" + mBegin + "\" end=\"" + mEnd + "\" title=\"" + mTitle + "\"" + lessonXmlTagEnd;
-    }
-
-    public Time getBegin() {
-        return mBegin;
-    }
-
-    public Time getEnd() {
-        return mEnd;
-    }
-
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
+    String toXml() {
+        return "<Lesson begin=\"" + begin + "\" end=\"" + end + "\" title=\"" + title + "\"/>";
     }
 }

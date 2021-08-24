@@ -21,25 +21,16 @@ class ShadowResponsiveDrawer {
     void updateRadius() {
         if (mActionButton.isPressed() && mCurrentShadowRadius < getMaxShadowRadius()) {
             mCurrentShadowRadius += SHADOW_DRAWING_STEP;
-            mActionButton.getInvalidator().requireInvalidation();
-        } else if (!mActionButton.isPressed() && mCurrentShadowRadius > getMinShadowRadius()) {
+            mActionButton.invalidationRequired = true;
+        } else if (!mActionButton.isPressed() && mCurrentShadowRadius > mActionButton.getShadowRadius()) {
             mCurrentShadowRadius -= SHADOW_DRAWING_STEP;
-            mActionButton.getInvalidator().requireInvalidation();
+            mActionButton.invalidationRequired = true;
         } else if (!mActionButton.isPressed()){
             mCurrentShadowRadius = mActionButton.getShadowRadius();
         }
     }
 
-    void setCurrentShadowRadius(float currentShadowRadius) {
-        mCurrentShadowRadius = currentShadowRadius;
-    }
-
-    float getMinShadowRadius() {
-        return mActionButton.getShadowRadius();
-    }
-
     float getMaxShadowRadius() {
-        return getMinShadowRadius() * SHADOW_RESPONSE_FACTOR;
+        return mActionButton.getShadowRadius() * SHADOW_RESPONSE_FACTOR;
     }
-
 }

@@ -2,7 +2,7 @@ package com.whatTimeUntilTheBell;
 
 import java.util.Calendar;
 
-public enum Day {
+enum Day {
     Monday,
     Tuesday,
     Wednesday,

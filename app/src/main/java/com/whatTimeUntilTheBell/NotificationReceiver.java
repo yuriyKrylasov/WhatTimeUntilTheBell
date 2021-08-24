@@ -8,6 +8,5 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         context.stopService(new Intent(context, NotificationService.class));
-        MyApplication.instance.mainActivity.finish();
     }
 }

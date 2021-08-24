@@ -1,5 +1,6 @@
 package com.whatTimeUntilTheBell;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,9 +10,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +21,7 @@ public class NotificationService extends Service {
     private MyApplication mApp;
     private int mImmutableFlag = 0;
 
-    private void sendNotification(String title, String text) {
+    private void sendNotification(CharSequence title, CharSequence text) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
@@ -33,8 +31,7 @@ public class NotificationService extends Service {
         PendingIntent pendingActionIntent = PendingIntent.getBroadcast(this, 0,
                 actionIntent, mImmutableFlag);
 
-        NotificationCompat.Builder notificationBuilder =
-            new NotificationCompat.Builder(getApplicationContext(), mChannelId)
+        startForeground(mNotificationId, new NotificationBuilder(getApplicationContext(), mChannelId)
                 .setShowWhen(false)
                 .setAutoCancel(true)
                 .setOngoing(true)
@@ -43,13 +40,8 @@ public class NotificationService extends Service {
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .addAction(0, getResources().getString(R.string.stop), pendingActionIntent)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-
-        if (text.isEmpty()) {
-            notificationBuilder.setContentText(text);
-        }
-
-        startForeground(mNotificationId, notificationBuilder.build());
+                .setPriority(Notification.PRIORITY_LOW)
+                .setContentText(text).build());
     }
 
     public void updateNotification() {
@@ -91,15 +83,14 @@ public class NotificationService extends Service {
 
         mChannelId = getResources().getString(R.string.app_name);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager mNotificationManager = (NotificationManager)
+            NotificationManager notificationManager = (NotificationManager)
                     getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel notificationChannel = new NotificationChannel(mChannelId, mChannelId,
                     NotificationManager.IMPORTANCE_LOW);
-            mNotificationManager.createNotificationChannel(notificationChannel);
+            notificationManager.createNotificationChannel(notificationChannel);
         }
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return new Binder();
@@ -107,6 +98,12 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopTimer();
     }
 }

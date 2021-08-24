@@ -5,10 +5,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,7 +20,11 @@ public class MyApplication extends Application implements Application.ActivityLi
     NotificationService notificationService;
     MainActivity mainActivity;
 
-    public static MyApplication instance;
+    private enum LessonKeys {
+        begin,
+        end,
+        title
+    }
 
     boolean isDarkTheme() {
         return sharedPref.isDarkTheme.get();
@@ -32,31 +32,6 @@ public class MyApplication extends Application implements Application.ActivityLi
 
     void setDarkTheme(boolean value) {
         sharedPref.isDarkTheme.set(value);
-    }
-
-    boolean isNeedAddXmlProlog() {
-        return sharedPref.isNeedAddXmlProlog.get();
-    }
-
-    void setNeedAddXmlProlog(boolean value) {
-        sharedPref.isNeedAddXmlProlog.set(value);
-    }
-
-    boolean isNeedAddNewLineToEndOfXml() {
-        return sharedPref.isNeedAddNewLineToEndOfXml.get();
-    }
-
-    void setNeedAddNewLineToEndOfXml(boolean value) {
-        sharedPref.isNeedAddNewLineToEndOfXml.set(value);
-    }
-
-    boolean getUseLongXmlTagEnd() {
-        return sharedPref.useLongXmlTagEnd.get();
-    }
-
-    void setUseLongXmlTagEnd(boolean value) {
-        sharedPref.useLongXmlTagEnd.set(value);
-        Lesson.lessonXmlTagEnd = value ? Lesson.LONG_END : Lesson.SHORT_END;
     }
 
     boolean isNeedCreateBeautifulXml() {
@@ -83,24 +58,14 @@ public class MyApplication extends Application implements Application.ActivityLi
         sharedPref.isNeedShowNotificationWhenLessonsOver.set(value);
     }
 
-    private enum LessonKeys {
-        begin,
-        end,
-        title
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
 
-        long start = System.currentTimeMillis();
         for (int i = 0; i < Day.values().length; ++i) {
             lessons[i] = new ArrayList<>();
             lessonsPrefs[i] = getSharedPreferences(Day.fromInt(i).toString() + "Lessons", MODE_PRIVATE);
         }
-        long end = System.currentTimeMillis() - start;
-        Log.i("prefLoad", String.valueOf(end));
 
         registerActivityLifecycleCallbacks(this);
         sharedPref = new SettingsSharedPref(getSharedPreferences("settings", MODE_PRIVATE),
@@ -118,9 +83,9 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     private void setLessonData(SharedPreferences.Editor editor, int id, Lesson lesson) {
-        setLessonData(editor, id, LessonKeys.begin, lesson.getBegin().toString());
-        setLessonData(editor, id, LessonKeys.end,   lesson.getEnd()  .toString());
-        setLessonData(editor, id, LessonKeys.title, lesson.getTitle());
+        setLessonData(editor, id, LessonKeys.begin, lesson.begin.toString());
+        setLessonData(editor, id, LessonKeys.end,   lesson.end  .toString());
+        setLessonData(editor, id, LessonKeys.title, lesson.title);
     }
 
     void loadLessonsData() {
@@ -178,14 +143,14 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     private String timeToString(Time time) {
-        String minutes = time.getMinutes() != 0 ? time.getMinutes() + " " + (
-            time.getMinutes() >= 10 && time.getMinutes() <= 19 ? getText(R.string.minutes) :
-                getTimeText(time.getMinutes() % 10, R.string.minute, R.string.minutes_ttf, R.string.minutes)
+        String minutes = time.minutes != 0 ? time.minutes + " " + (
+            time.minutes >= 10 && time.minutes <= 19 ? getText(R.string.minutes) :
+                getTimeText(time.minutes % 10, R.string.minute, R.string.minutes_ttf, R.string.minutes)
         ) + " " : "";
 
-        String seconds = time.getSeconds() != 0 ? time.getSeconds() + " " + (
-            time.getSeconds() >= 10 && time.getSeconds() <= 19 ? getText(R.string.minutes) :
-                getTimeText(time.getSeconds() % 10, R.string.second, R.string.seconds_ttf, R.string.seconds)
+        String seconds = time.seconds != 0 ? time.seconds + " " + (
+            time.seconds >= 10 && time.seconds <= 19 ? getText(R.string.minutes) :
+                getTimeText(time.seconds % 10, R.string.second, R.string.seconds_ttf, R.string.seconds)
         ) : "";
 
         return minutes + seconds;
@@ -195,16 +160,16 @@ public class MyApplication extends Application implements Application.ActivityLi
         Time currentTime = new Time();
 
         for (Lesson lesson : lessons[Day.current()]) {
-            if (currentTime.compareTo(lesson.getBegin()) < 0) {
+            if (currentTime.compareTo(lesson.begin) < 0) {
                 return new String[]{
-                        getString(R.string.until_plh_left, getText(R.string.lesson)),
-                        timeToString(lesson.getBegin().minus(currentTime))
+                        getString(R.string.time_until_the_bell_title, getText(R.string.lesson)),
+                        timeToString(lesson.begin.minus(currentTime))
                 };
             }
-            if (currentTime.compareTo(lesson.getEnd()) < 0) {
+            if (currentTime.compareTo(lesson.end) < 0) {
                 return new String[]{
-                        getString(R.string.until_plh_left, getText(R.string._break)),
-                        timeToString(lesson.getEnd().minus(currentTime))
+                        getString(R.string.time_until_the_bell_title, getText(R.string._break)),
+                        timeToString(lesson.end.minus(currentTime))
                 };
             }
         }
@@ -212,19 +177,19 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     @Override
-    public void onActivityStopped(@NonNull Activity activity) {
+    public void onActivityStopped(Activity activity) {
     }
 
     @Override
-    public void onActivityStarted(@NonNull Activity activity) {
+    public void onActivityStarted(Activity activity) {
     }
 
     @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
     }
 
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {
+    public void onActivityResumed(Activity activity) {
         if (activityCount == 0 && notificationService != null && !mainActivity.isStartingActivity()) {
             notificationService.stopTimer();
         }
@@ -232,7 +197,7 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     @Override
-    public void onActivityPaused(@NonNull Activity activity) {
+    public void onActivityPaused(Activity activity) {
         --activityCount;
         if (activityCount == 0 && notificationService != null && !mainActivity.isStartingActivity()) {
             notificationService.startTimer();
@@ -240,10 +205,10 @@ public class MyApplication extends Application implements Application.ActivityLi
     }
 
     @Override
-    public void onActivityDestroyed(@NonNull Activity activity) {
+    public void onActivityDestroyed(Activity activity) {
     }
 
     @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
     }
 }

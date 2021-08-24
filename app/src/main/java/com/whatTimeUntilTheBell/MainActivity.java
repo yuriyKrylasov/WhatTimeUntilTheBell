@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
@@ -26,31 +25,36 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private Timer timer;
-    private MyApplication app;
-    private final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), this::setDayText);
+    private static final String XML_PROLOG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
-    private TextView dayTv;
-    private ViewPager vp;
-    private ActionButton fab;
-    private TextView timeUntilTheTv;
-    private TextView timeUntilTheBell;
+    private static int vpItem = Day.current();
 
-    boolean mIsStartingActivity = false;
+    private Timer mTimer;
+    private MyApplication mApp;
+    private final ViewPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this::setDayText);
+
+    private TextView mDayTv;
+    private ViewPager mVp;
+    private ActionButton mFab;
+    private TextView mTimeUntilTheBellTitle;
+    private TextView mTimeUntilTheBell;
+
+    private boolean mIsStartingActivity = false;
 
     public boolean isStartingActivity() {
         return mIsStartingActivity;
     }
 
     public ActionButton getActionButton() {
-        return fab;
+        return mFab;
     }
 
-    interface OnPageScrolledListener {
+    private interface OnPageScrolledListener {
         void onPageScrolled(int position);
     }
 
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public int getItemPosition(@NonNull Object obj) {
+        public int getItemPosition(Object obj) {
             return POSITION_NONE;
         }
 
@@ -94,21 +98,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDayText(int day) {
         vpItem = day;
-        var localizedDays = new String[]{
+        String[] localizedDays = new String[]{
                 getString(R.string.monday),
                 getString(R.string.tuesday),
                 getString(R.string.wednesday),
                 getString(R.string.thursday),
                 getString(R.string.friday),
                 getString(R.string.saturday),
-                getString(R.string.sunday),
+                getString(R.string.sunday)
         };
-        dayTv.setText(localizedDays[day]);
+        mDayTv.setText(localizedDays[day]);
     }
 
     private void startTimer() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 showTime();
@@ -118,34 +122,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimer() {
-        timer.cancel();
+        mTimer.cancel();
     }
 
     private void showTime() {
-        var array = app.whatsNext();
+        String[] array = mApp.whatsNext();
 
         runOnUiThread(() -> {
-            timeUntilTheTv.setText(array[0]);
-            timeUntilTheBell.setText(array[1]);
+            mTimeUntilTheBellTitle.setText(array[0]);
+            mTimeUntilTheBell.setText(array[1]);
             if (array[1].isEmpty()) {
-                timeUntilTheBell.setVisibility(View.GONE);
+                mTimeUntilTheBell.setVisibility(View.GONE);
             }
             else {
-                timeUntilTheBell.setVisibility(View.VISIBLE);
+                mTimeUntilTheBell.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private String lessonsListToXml(ArrayList<Lesson> list) {
-        var s = new StringBuilder();
-        if (app.isNeedCreateBeautifulXml()) {
-            for (var lesson : list) {
+        StringBuilder s = new StringBuilder();
+        if (mApp.isNeedCreateBeautifulXml()) {
+            for (Lesson lesson : list) {
                 s.append("        ").append(lesson.toXml()).append("\n");
             }
             s.deleteCharAt(s.length() - 1);
         }
         else {
-            for (var lesson : list) {
+            for (Lesson lesson : list) {
                 s.append(lesson.toXml());
             }
         }
@@ -155,22 +159,22 @@ public class MainActivity extends AppCompatActivity {
     private String getXmlLessons() {
         StringBuilder s = new StringBuilder();
 
-        if (app.isNeedCreateBeautifulXml()) {
-            for (var day : Day.values()) {
-                var lessons = app.lessons[day.ordinal()];
+        if (mApp.isNeedCreateBeautifulXml()) {
+            for (Day day : Day.values()) {
+                ArrayList<Lesson> lessons = mApp.lessons[day.ordinal()];
                 if (lessons.isEmpty()) {
                     continue;
                 }
 
                 s.append("    <").append(day.toString()).append(">\n")
-                        .append(lessonsListToXml(lessons)).append("\n")
-                        .append("    </").append(day.toString()).append(">\n");
+                        .append(lessonsListToXml(lessons))
+                        .append("\n    </").append(day.toString()).append(">\n");
             }
             s.deleteCharAt(s.length() - 1);
         }
         else {
-            for (var day : Day.values()) {
-                var lessons = app.lessons[day.ordinal()];
+            for (Day day : Day.values()) {
+                ArrayList<Lesson> lessons = mApp.lessons[day.ordinal()];
                 if (lessons.isEmpty()) {
                     continue;
                 }
@@ -184,51 +188,51 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (MyApplication) getApplication();
-        app.mainActivity = this;
-        AppCompatDelegate.setDefaultNightMode(app.isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        mApp = (MyApplication) getApplication();
+        mApp.mainActivity = this;
+        AppCompatDelegate.setDefaultNightMode(mApp.isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
         setContentView(R.layout.activity_main);
 
-        dayTv = findViewById(R.id.day);
-        vp = findViewById(R.id.vp);
-        fab = findViewById(R.id.fab);
-        timeUntilTheTv = findViewById(R.id.time_until_the_text);
-        timeUntilTheBell = findViewById(R.id.time_until_the_bell);
+        mDayTv = findViewById(R.id.day);
+        mVp = findViewById(R.id.vp);
+        mFab = findViewById(R.id.fab);
+        mTimeUntilTheBellTitle = findViewById(R.id.time_until_the_bell_title);
+        mTimeUntilTheBell = findViewById(R.id.time_until_the_bell);
 
-        var lessons = app.lessons[Day.current()];
+        List<Lesson> lessons = mApp.lessons[Day.current()];
         if (lessons.size() == 0) {
-            app.loadLessonsData();
+            mApp.loadLessonsData();
             // update link
-            lessons = app.lessons[Day.current()];
+            lessons = mApp.lessons[Day.current()];
 
             // first startup
             if (lessons.size() == 0) {
                 // save current theme to preferences
-                app.setDarkTheme(app.isDarkTheme());
+                mApp.setDarkTheme(mApp.isDarkTheme());
             }
         }
 
         setDayText(vpItem);
-        vp.setAdapter(adapter);
-        vp.addOnPageChangeListener(adapter);
-        vp.setCurrentItem(vpItem);
+        mVp.setAdapter(mAdapter);
+        mVp.addOnPageChangeListener(mAdapter);
+        mVp.setCurrentItem(vpItem);
 
-        fab.setOnClickListener(v -> {
-            int day = vp.getCurrentItem();
-            var dialog = new ChangeLessonDialog();
-            dialog.setLessonTitle(getString(R.string.lesson_num, String.valueOf(app.lessons[day].size() + 1)));
+        mFab.setOnClickListener(v -> {
+            int day = mVp.getCurrentItem();
+            ChangeLessonDialog dialog = new ChangeLessonDialog();
+            dialog.setLessonTitle(getString(R.string.lesson_num, String.valueOf(mApp.lessons[day].size() + 1)));
             dialog.setDeleteLessonButtonVisibility(View.GONE);
-            dialog.onApply = lesson ->  {
-                app.lessons[day].add(lesson);
-                app.saveLastLesson(day);
-                adapter.notifyDataSetChanged();
+            dialog.onApply = lesson -> {
+                mApp.lessons[day].add(lesson);
+                mApp.saveLastLesson(day);
+                mAdapter.notifyDataSetChanged();
             };
 
             dialog.show(getFragmentManager(), ChangeLessonDialog.class.getSimpleName());
         });
 
-        if (app.isNeedShowNotification()) {
+        if (mApp.isNeedShowNotification()) {
             startService(new Intent(this, NotificationService.class));
         }
     }
@@ -261,44 +265,38 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.share) {
-            var isEmpty = true;
-            for (var day : app.lessons) {
-                if (!day.isEmpty()) {
-                    isEmpty = false;
+            boolean isLessonsExists = false;
+            for (List<Lesson> lessons : mApp.lessons) {
+                if (!lessons.isEmpty()) {
+                    isLessonsExists = true;
                     break;
                 }
             }
-            if (isEmpty) {
+            if (!isLessonsExists) {
                 Toast.makeText(getApplicationContext(), getText(R.string.lessons_not_found),
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
 
-            var shareIntent = new Intent(Intent.ACTION_SEND)
+            Intent shareIntent = new Intent(Intent.ACTION_SEND)
                     .setType("text/plain")
                     .putExtra(Intent.EXTRA_SUBJECT, "lessons");
 
-            var message = "";
-            if (app.isNeedAddXmlProlog()) {
-                message += xmlProlog;
-                if (app.isNeedCreateBeautifulXml()) {
-                    message += "\n";
-                }
+            String message = XML_PROLOG;
+            if (mApp.isNeedCreateBeautifulXml()) {
+                message += "\n";
             }
 
             message += "<Week>";
-            message += app.isNeedCreateBeautifulXml() ? "\n" + getXmlLessons() + "\n" : getXmlLessons();
-            message += "</Week>";
-            if (app.isNeedAddNewLineToEndOfXml()) {
-                message += "\n";
-            }
+            message += mApp.isNeedCreateBeautifulXml() ? "\n" + getXmlLessons() + "\n" : getXmlLessons();
+            message += "</Week>\n";
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, message);
             startActivity(Intent.createChooser(shareIntent, getText(R.string.share)));
             return true;
         }
         if (item.getItemId() == R.id.load) {
-            var intent = new Intent(Intent.ACTION_GET_CONTENT).setType("text/plain");
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("text/plain");
             startActivityForResult(Intent.createChooser(intent, getText(R.string.select_file_manager)), 8777);
             return true;
         }
@@ -310,8 +308,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String readTextFile(InputStream inputStream) throws IOException {
-        var outputStream = new ByteArrayOutputStream();
-        var buf = new byte[1024];
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
         int len;
         while ((len = inputStream.read(buf)) != -1) {
             outputStream.write(buf, 0, len);
@@ -328,15 +326,16 @@ public class MainActivity extends AppCompatActivity {
             loadLessonsFromFile(data);
         } catch (Exception e) {
             e.printStackTrace();
+            showWrongFileToast();
         }
     }
 
     private void loadLessonsFromFile(Intent data) throws Exception {
-        var s = readTextFile(getContentResolver().openInputStream(data.getData()));
+        String s = readTextFile(getContentResolver().openInputStream(data.getData()));
 
-        var factory = XmlPullParserFactory.newInstance();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
-        var xpp = factory.newPullParser();
+        XmlPullParser xpp = factory.newPullParser();
 
         xpp.setInput(new StringReader(s));
         xpp.next();
@@ -346,12 +345,12 @@ public class MainActivity extends AppCompatActivity {
         }
         xpp.next();
 
-        ArrayList<Lesson>[] tempLessons = (ArrayList<Lesson>[]) Array.newInstance(ArrayList.class, Day.values().length);
+        ArrayList<Lesson>[] tempLessons = (ArrayList<Lesson>[]) Array.newInstance(ArrayList.class, 7);
         for (int i = 0; i < Day.values().length; ++i) {
             tempLessons[i] = new ArrayList<>();
         }
 
-        var currentDay = 0;
+        int currentDay = 0;
         while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
             if (xpp.getName().equals("Lesson") && xpp.getEventType() == XmlPullParser.START_TAG) {
                 tempLessons[currentDay].add(
@@ -377,11 +376,8 @@ public class MainActivity extends AppCompatActivity {
             xpp.next();
         }
 
-        System.arraycopy(tempLessons, 0, app.lessons, 0, tempLessons.length);
-        app.saveLessons();
-        adapter.notifyDataSetChanged();
+        System.arraycopy(tempLessons, 0, mApp.lessons, 0, tempLessons.length);
+        mApp.saveLessons();
+        mAdapter.notifyDataSetChanged();
     }
-
-    private static final String xmlProlog = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-    private static int vpItem = Day.current();
 }

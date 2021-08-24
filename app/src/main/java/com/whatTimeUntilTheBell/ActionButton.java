@@ -8,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -25,180 +27,82 @@ public class ActionButton extends View {
     private int mButtonColorPressed = 0xFF311BB1;
     private int mButtonColorRipple = darkenButtonColorPressed();
 
-    private float mShadowRadius = dpToPx(8.0f);
-    private float mShadowXOffset = 0.0f;
-    private float mShadowYOffset = mShadowRadius;
+    private final float mShadowRadius = dpToPx(8.0f);
+    private final float mShadowXOffset = 0.0f;
+    private final float mShadowYOffset = mShadowRadius;
     private int mShadowColor = 0x42000000;
-    private final boolean mShadowResponsiveEffectEnabled = true;
 
     private final Drawable mImage = getResources().getDrawable(R.drawable.ic_add);
-    private float mImageSize = dpToPx(24.0f);
+    private final float mImageSize = dpToPx(24.0f);
 
-    private final Animation mShowAnimation = loadAnimation(getContext(), R.anim.fab_jump_from_down);
-    private final Animation mHideAnimation = loadAnimation(getContext(), R.anim.fab_jump_to_down);
+    private final Animation mShowAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fab_jump_from_down);
+    private final Animation mHideAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fab_jump_to_down);
 
-    private TouchPoint mTouchPoint = new TouchPoint(0.0f, 0.0f);
+    private PointF mPoint = new PointF(0.0f, 0.0f);
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final ViewInvalidator mInvalidator = new ViewInvalidator(this);
     protected final RippleEffectDrawer rippleEffectDrawer = new RippleEffectDrawer(this);
     protected final ShadowResponsiveDrawer shadowResponsiveDrawer = new ShadowResponsiveDrawer(this);
 
-    public ActionButton(Context context) {
-        super(context);
-        initLayerType();
-    }
+    boolean invalidationRequired;
+    boolean invalidationDelayedRequired;
+    long invalidationDelay;
 
     public ActionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initLayerType();
-        initActionButtonAttrs(context, attrs, 0);
-    }
 
-    public ActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initLayerType();
-        initActionButtonAttrs(context, attrs, defStyleAttr);
-    }
-
-    private void initActionButtonAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-        TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ActionButton,
-                defStyleAttr, 0);
-        initButtonColor(attributes);
-        initButtonColorPressed(attributes);
-        initButtonColorRipple(attributes);
-        initShadowRadius(attributes);
-        initShadowXOffset(attributes);
-        initShadowYOffset(attributes);
-        initShadowColor(attributes);
-        initImageSize(attributes);
-        attributes.recycle();
-    }
-
-    /**
-     * Initializes the layer type needed for shadows drawing
-     */
-    private void initLayerType() {
+        // Initializes the layer type needed for shadows drawing
         setLayerType(LAYER_TYPE_SOFTWARE, mPaint);
     }
 
-    private void initButtonColor(TypedArray attrs) {
-        int index = R.styleable.ActionButton_button_color;
-        if (attrs.hasValue(index)) {
-            mButtonColor = attrs.getColor(index, mButtonColor);
-        }
-    }
-
-    private void initButtonColorPressed(TypedArray attrs) {
-        int index = R.styleable.ActionButton_button_colorPressed;
-        if (attrs.hasValue(index)) {
-            mButtonColorPressed = attrs.getColor(index, mButtonColorPressed);
-            mButtonColorRipple = darkenButtonColorPressed();
-        }
-    }
-
-    private void initButtonColorRipple(TypedArray attrs) {
-        int index = R.styleable.ActionButton_button_colorRipple;
-        if (attrs.hasValue(index)) {
-            mButtonColorRipple = attrs.getColor(index, mButtonColorRipple);
-        }
-    }
-
-    private void initShadowRadius(TypedArray attrs) {
-        int index = R.styleable.ActionButton_shadow_radius;
-        if (attrs.hasValue(index)) {
-            mShadowRadius = attrs.getDimension(index, mShadowRadius);
-        }
-    }
-
-    private void initShadowXOffset(TypedArray attrs) {
-        int index = R.styleable.ActionButton_shadow_xOffset;
-        if (attrs.hasValue(index)) {
-            mShadowXOffset = attrs.getDimension(index, mShadowXOffset);
-        }
-    }
-
-    private void initShadowYOffset(TypedArray attrs) {
-        int index = R.styleable.ActionButton_shadow_yOffset;
-        if (attrs.hasValue(index)) {
-            mShadowYOffset = attrs.getDimension(index, mShadowYOffset);
-        }
-    }
-
-    private void initShadowColor(TypedArray attrs) {
-        int index = R.styleable.ActionButton_shadow_color;
-        if (attrs.hasValue(index)) {
-            mShadowColor = attrs.getColor(index, mShadowColor);
-        }
-    }
-
-    private void initImageSize(TypedArray attrs) {
-        int index = R.styleable.ActionButton_image_size;
-        if (attrs.hasValue(index)) {
-            mImageSize = attrs.getDimension(index, mImageSize);
-        }
-    }
-
-    public void playShowAnimation() {
-        startAnimation(mShowAnimation);
-    }
-
-    public void playHideAnimation() {
-        startAnimation(mHideAnimation);
-    }
-
-    public void show() {
-        if (isHidden()) {
-            playShowAnimation();
+    void show() {
+        if (getVisibility() == INVISIBLE) {
+            startAnimation(mShowAnimation);
             setVisibility(VISIBLE);
         }
     }
 
-    public void hide() {
-        if (!isHidden()) {
-            playHideAnimation();
+    void hide() {
+        if (getVisibility() == VISIBLE) {
+            startAnimation(mHideAnimation);
             setVisibility(INVISIBLE);
         }
-    }
-
-    public boolean isHidden() {
-        return getVisibility() == INVISIBLE;
     }
 
     public boolean isPressed() {
         return mIsPressed;
     }
 
-    public void setIsPressed(boolean isPressed) {
+    void setIsPressed(boolean isPressed) {
         mIsPressed = isPressed;
         invalidate();
     }
 
-    public int getButtonColor() {
+    int getButtonColor() {
         return mButtonColor;
     }
 
-    public void setButtonColor(int buttonColor) {
+    void setButtonColor(int buttonColor) {
         mButtonColor = buttonColor;
         invalidate();
     }
 
-    public int getButtonColorPressed() {
+    int getButtonColorPressed() {
         return mButtonColorPressed;
     }
 
-    public void setButtonColorPressed(int buttonColorPressed) {
+    void setButtonColorPressed(int buttonColorPressed) {
         mButtonColorPressed = buttonColorPressed;
         mButtonColorRipple = darkenButtonColorPressed();
     }
 
     private int darkenButtonColorPressed() {
-        var hsv = new float[3];
+        float[] hsv = new float[3];
         Color.colorToHSV(mButtonColorPressed, hsv);
         hsv[2] *= 0.8f;
         return Color.HSVToColor(hsv);
     }
 
-    public int getButtonColorRipple() {
+    int getButtonColorRipple() {
         return mButtonColorRipple;
     }
 
@@ -206,76 +110,59 @@ public class ActionButton extends View {
         return !hasElevation() && mShadowRadius > 0.0f;
     }
 
-    public float getShadowRadius() {
+    float getShadowRadius() {
         return mShadowRadius;
     }
 
-    public float getShadowXOffset() {
+    float getShadowXOffset() {
         return mShadowXOffset;
     }
 
-    public float getShadowYOffset() {
+    float getShadowYOffset() {
         return mShadowYOffset;
     }
 
-    public int getShadowColor() {
+    int getShadowColor() {
         return mShadowColor;
     }
 
-    public void setShadowColor(int shadowColor) {
+    void setShadowColor(int shadowColor) {
         mShadowColor = shadowColor;
         invalidate();
     }
 
-    public TouchPoint getTouchPoint() {
-        return mTouchPoint;
+    PointF getPoint() {
+        return mPoint;
     }
 
-    protected void setTouchPoint(TouchPoint point) {
-        mTouchPoint = point;
-    }
-
-    /**
-     * Adds additional actions on motion events:
-     * 1. Changes the <b>Action Button</b> {@link #mState} to {@link State#PRESSED}
-     *    on {@link android.view.MotionEvent#ACTION_DOWN}
-     * 2. Changes the <b>Action Button</b> {@link #mState} to {@link State#NORMAL}
-     *    on {@link android.view.MotionEvent#ACTION_UP}
-     * 3. Changes the <b>Action Button</b> {@link #mState} to {@link State#NORMAL}
-     *    on {@link android.view.MotionEvent#ACTION_MOVE} in case when touch point
-     *    leaves the main circle
-     *
-     * @param event motion event
-     * @return true if event was handled, otherwise false
-     */
-    @SuppressWarnings("all")
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        TouchPoint point = new TouchPoint(event.getX(), event.getY());
-        boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(),
-                calculateCircleRadius());
-        int action = event.getAction();
-        switch (action) {
+
+        PointF point = new PointF(event.getX(), event.getY());
+        boolean touchPointInsideCircle = Math.pow(point.x - calculateCenterX(), 2) +
+                Math.pow(point.y - calculateCenterY(), 2) <= Math.pow(calculateCircleRadius(), 2);
+
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (touchPointInsideCircle) {
                     setIsPressed(true);
-                    mTouchPoint = point;
+                    mPoint = point;
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 if (touchPointInsideCircle) {
                     setIsPressed(false);
-                    mTouchPoint.reset();
+                    mPoint.set(0, 0);
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (!touchPointInsideCircle && mIsPressed) {
                     setIsPressed(false);
-                    mTouchPoint.reset();
+                    mPoint.set(0, 0);
                     return true;
                 }
         }
@@ -299,32 +186,31 @@ public class ActionButton extends View {
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
     }
 
-    protected ViewInvalidator getInvalidator() {
-        return mInvalidator;
-    }
-
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         drawCircle(canvas);
-        drawRipple(canvas);
+        rippleEffectDrawer.draw(canvas);
         if (hasElevation()) {
             drawElevation();
         }
-        if (mImage != null) {
-            drawImage(canvas);
+        drawImage(canvas);
+
+        if (invalidationRequired) {
+            postInvalidate();
         }
-        mInvalidator.invalidate();
+        if (invalidationDelayedRequired) {
+            postInvalidateDelayed(invalidationDelay);
+        }
+        invalidationRequired = false;
+        invalidationDelayedRequired = false;
+        invalidationDelay = 0L;
     }
 
     protected void drawCircle(Canvas canvas) {
         resetPaint();
         if (hasShadow()) {
-            if (mShadowResponsiveEffectEnabled) {
-                shadowResponsiveDrawer.draw();
-            } else {
-                drawShadow();
-            }
+            shadowResponsiveDrawer.draw();
         }
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(mIsPressed || rippleEffectDrawer.isDrawingInProgress() ?
@@ -344,75 +230,47 @@ public class ActionButton extends View {
         return mSize / 2;
     }
 
-    protected void drawShadow() {
-        mPaint.setShadowLayer(mShadowRadius, mShadowXOffset, mShadowYOffset, mShadowColor);
-    }
-
-    protected void drawRipple(Canvas canvas) {
-        rippleEffectDrawer.draw(canvas);
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void drawElevation() {
-        float halfSize = mSize / 2;
-        final int left = (int) (calculateCenterX() - halfSize);
-        final int top = (int) (calculateCenterY() - halfSize);
-        final int right = (int) (calculateCenterX() + halfSize);
-        final int bottom = (int) (calculateCenterY() + halfSize);
-        ViewOutlineProvider provider = new ViewOutlineProvider() {
+        final float halfSize = mSize / 2;
+        final int left     = (int) (calculateCenterX() - halfSize);
+        final int top      = (int) (calculateCenterY() - halfSize);
+        final int right    = (int) (calculateCenterX() + halfSize);
+        final int bottom   = (int) (calculateCenterY() + halfSize);
+        setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
                 outline.setOval(left, top, right, bottom);
             }
-        };
-        setOutlineProvider(provider);
+        });
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean hasElevation() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getElevation() > 0.0f;
     }
 
     private void drawImage(Canvas canvas) {
-        int startPointX = (int) (calculateCenterX() - mImageSize / 2);
-        int startPointY = (int) (calculateCenterY() - mImageSize / 2);
-        int endPointX = (int) (startPointX + mImageSize);
-        int endPointY = (int) (startPointY + mImageSize);
-        mImage.setBounds(startPointX, startPointY, endPointX, endPointY);
+        final int startPointX = (int) (calculateCenterX() - mImageSize / 2);
+        final int startPointY = (int) (calculateCenterY() - mImageSize / 2);
+        mImage.setBounds(startPointX, startPointY, (int) (startPointX + mImageSize), (int) (startPointY + mImageSize));
         mImage.draw(canvas);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(calculateMeasuredWidth(), calculateMeasuredHeight());
-    }
 
-    private int calculateMeasuredWidth() {
-        return (int) (mSize + calculateShadowWidth());
-    }
-
-    private int calculateMeasuredHeight() {
-        return (int) (mSize + calculateShadowHeight());
-    }
-
-    private int calculateShadowWidth() {
-        float shadowRadius = mShadowResponsiveEffectEnabled ?
-                shadowResponsiveDrawer.getMaxShadowRadius() : mShadowRadius;
-        return hasShadow() ? (int) ((shadowRadius + Math.abs(mShadowXOffset)) * 2) : 0;
-    }
-
-    private int calculateShadowHeight() {
-        float shadowRadius = mShadowResponsiveEffectEnabled ?
-                shadowResponsiveDrawer.getMaxShadowRadius() : mShadowRadius;
-        return hasShadow() ? (int) ((shadowRadius + Math.abs(mShadowYOffset)) * 2) : 0;
+        if (!hasShadow()) {
+            setMeasuredDimension(0, 0);
+        }
+        else {
+            final float msr = shadowResponsiveDrawer.getMaxShadowRadius();
+            setMeasuredDimension((int) (mSize + ((int) (msr + Math.abs(mShadowXOffset)) * 2)),
+                    (int) (mSize + (int) ((msr + Math.abs(mShadowYOffset)) * 2)));
+        }
     }
 
     private float dpToPx(float dp) {
-        return DensityConverter.dpToPx(getContext(), dp);
-    }
-
-    private static Animation loadAnimation(Context context, int animResId) {
-        return AnimationUtils.loadAnimation(context, animResId);
+        return dp * getContext().getResources().getDisplayMetrics().density;
     }
 }

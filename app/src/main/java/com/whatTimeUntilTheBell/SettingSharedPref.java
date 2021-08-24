@@ -7,10 +7,6 @@ class SettingSharedPref {
     private final String mPrefName;
     private final Boolean mDefValue;
 
-    public SettingSharedPref(SharedPreferences pref, String prefName) {
-        this(pref, prefName, false);
-    }
-
     public SettingSharedPref(SharedPreferences pref, String prefName, Boolean defValue) {
         mPref = pref;
         mPrefName = prefName;

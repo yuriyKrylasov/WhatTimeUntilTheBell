@@ -2,7 +2,6 @@ package com.whatTimeUntilTheBell;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,19 +11,16 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 public class ChangeLessonDialog extends DialogFragment {
     interface OnApplyDialogListener {
         void onApply(Lesson lesson);
     }
-    @NonNull OnApplyDialogListener onApply = lesson -> {};
+    OnApplyDialogListener onApply = lesson -> {};
 
     interface OnDeleteLessonListener {
         void onDeleteLesson();
     }
-    @NonNull OnDeleteLessonListener onDeleteLesson = () -> {};
+    OnDeleteLessonListener onDeleteLesson = () -> {};
 
     private Lesson mLesson = new Lesson(new Time(7, 30), new Time(8, 15), "");
 
@@ -33,15 +29,15 @@ public class ChangeLessonDialog extends DialogFragment {
 
     private int mDeleteLessonButtonVisibility = View.VISIBLE;
 
-    public void setLessonData(@NonNull Lesson lesson) {
-        mLesson = new Lesson(new Time(lesson.getBegin().toString()), new Time(lesson.getEnd().toString()), lesson.getTitle());
+    void setLessonData(Lesson lesson) {
+        mLesson = new Lesson(new Time(lesson.begin.toString()), new Time(lesson.end.toString()), lesson.title);
     }
 
-    public void setLessonTitle(String title) {
-        mLesson.setTitle(title);
+    void setLessonTitle(String title) {
+        mLesson.title = title;
     }
 
-    public void setDeleteLessonButtonVisibility(int visibility) {
+    void setDeleteLessonButtonVisibility(int visibility) {
         if (mDeleteLessonButton != null) {
             mDeleteLessonButton.setVisibility(visibility);
         }
@@ -50,17 +46,16 @@ public class ChangeLessonDialog extends DialogFragment {
         }
     }
 
-    private void showTimePickerDialog(Button b, @NonNull Time time, int stringId) {
+    private void showTimePickerDialog(Button b, Time time, int stringId) {
         new TimePickerDialog(getActivity(), (v, h, m) -> {
-            time.setHours(h);
-            time.setMinutes(m);
+            time.hours = h;
+            time.minutes = m;
             b.setText(getResources().getString(stringId, time.toString()));
-        }, time.getHours(), time.getMinutes(), true).show();
+        }, time.hours, time.minutes, true).show();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.dialog_change_lesson, null);
 
@@ -71,13 +66,13 @@ public class ChangeLessonDialog extends DialogFragment {
         Button mCancelButton      = view.findViewById(R.id.cancel_button);
         Button mOkButton          = view.findViewById(R.id.ok_button);
 
-        mLessonName.setText(mLesson.getTitle());
-        mLessonBeginButton.setText(getResources().getString(R.string.begin, mLesson.getBegin().toString()));
-        mLessonEndButton.setText(getResources().getString(R.string.end, mLesson.getEnd().toString()));
+        mLessonName.setText(mLesson.title);
+        mLessonBeginButton.setText(getResources().getString(R.string.begin, mLesson.begin.toString()));
+        mLessonEndButton.setText(getResources().getString(R.string.end, mLesson.end.toString()));
         mDeleteLessonButton.setVisibility(mDeleteLessonButtonVisibility);
 
-        mLessonBeginButton.setOnClickListener(v -> showTimePickerDialog((Button) v, mLesson.getBegin(), R.string.begin));
-        mLessonEndButton.setOnClickListener(v -> showTimePickerDialog((Button) v, mLesson.getEnd(), R.string.end));
+        mLessonBeginButton.setOnClickListener(v -> showTimePickerDialog((Button) v, mLesson.begin, R.string.begin));
+        mLessonEndButton.setOnClickListener(v -> showTimePickerDialog((Button) v, mLesson.end, R.string.end));
 
         mDeleteLessonButton.setOnClickListener(v ->
             new AlertDialog.Builder(getActivity())
@@ -93,7 +88,7 @@ public class ChangeLessonDialog extends DialogFragment {
         );
         mCancelButton.setOnClickListener(v -> dismiss());
         mOkButton.setOnClickListener(v -> {
-            mLesson.setTitle(mLessonName.getText().toString());
+            mLesson.title = mLessonName.getText().toString();
             onApply.onApply(mLesson);
             dismiss();
         });

@@ -2,13 +2,10 @@ package com.whatTimeUntilTheBell;
 
 import static android.graphics.Color.TRANSPARENT;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-
-import androidx.annotation.Nullable;
 
 public class SwitchPreference extends Preference {
     private final Switch mSwitch;
@@ -36,9 +33,9 @@ public class SwitchPreference extends Preference {
     }
 
     @Override
-    public void setOnClickListener(@Nullable OnClickListener l) {
+    public void setOnClickListener(OnClickListener l) {
         super.setOnClickListener(v -> {
-            var newState = !mSwitch.isChecked();
+            boolean newState = !mSwitch.isChecked();
             if (onStateChanged != null) {
                 onStateChanged.onStateChanged(newState);
             }

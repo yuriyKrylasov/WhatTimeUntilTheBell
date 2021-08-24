@@ -3,6 +3,7 @@ package com.whatTimeUntilTheBell;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.Region;
 
 class RippleEffectDrawer {
@@ -44,20 +45,19 @@ class RippleEffectDrawer {
     void draw(Canvas canvas) {
         updateRadius();
         drawRipple(canvas);
-        ViewInvalidator invalidator = mActionButton.getInvalidator();
         if (isDrawingInProgress()) {
-            invalidator.requireInvalidation();
+            mActionButton.invalidationRequired = true;
         } else if (isDrawingFinished() && !mActionButton.isPressed()) {
-            invalidator.requireDelayedInvalidation();
-            invalidator.setInvalidationDelay(POST_INVALIDATION_DELAY);
+            mActionButton.invalidationDelayedRequired = true;
+            mActionButton.invalidationDelay = POST_INVALIDATION_DELAY;
         }
     }
 
     private void drawRipple(Canvas canvas) {
         canvas.save();
         canvas.clipPath(getCircleClipPath(), Region.Op.INTERSECT);
-        TouchPoint point = mActionButton.getTouchPoint();
-        canvas.drawCircle(point.getX(), point.getY(), currentRadius, getPreparedPaint());
+        PointF point = mActionButton.getPoint();
+        canvas.drawCircle(point.x, point.y, currentRadius, getPreparedPaint());
         canvas.restore();
     }
 
